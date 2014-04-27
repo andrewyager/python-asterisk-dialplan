@@ -7,7 +7,11 @@ This module adds some python bindings to help you manipulate patterns (and in fu
 
 ## Installation
 
-Until we are uploaded onto PyPy, you can install using the following:
+You can install this by simply running:
+
+`pip install asterisk_dialplan`
+
+Or you can use the latest development version:
 
 `pip install -e git+git://github.com/andrewyager/python-asterisk-dialplan.git#egg=asterisk_dialplan`
 
