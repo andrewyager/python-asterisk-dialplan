@@ -1,4 +1,5 @@
 from util import common_start
+import re
 
 def build_safe_pattern(first_number, last_number):
 	""" Builds a pattern that covers digits from first_number to last_number
@@ -88,3 +89,51 @@ def generate_patterns(low,high):
 	for rangeTuple in range_list:
 		patterns.append(build_safe_pattern(rangeTuple[0], rangeTuple[1]))
 	return patterns
+
+def _chunk_safe_patterns(pattern):
+	""" Take a pattern string and split out out into pattern strings where only the least significant
+	digits change. """
+	#not implemented yet, so just return the pattern in a list
+	return [pattern]
+
+def _get_lowest_number_from_pattern(pattern):
+	matches = re.search(r'\[([\d-]+?)\]', pattern)
+	if matches is not None:
+		L = list(matches.group(1))
+		L.remove('-')
+		sub = min(L)
+		pattern = re.sub(r'\[[\d-]+?\]', sub, pattern)
+	# We should be matching for patterns that look like [234589] here as well and finding the minimum
+	pattern = pattern.replace('X', '0')
+	pattern = pattern.replace('Z', '1')
+	pattern = pattern.replace('N', '2')
+	pattern = re.sub(r'^_', '', pattern)
+	return pattern
+
+def _get_highest_number_from_pattern(pattern):
+	matches = re.search(r'\[([\d-]+?)\]', pattern)
+	if matches is not None:
+		L = list(matches.group(1))
+		L.remove('-')
+		sub = max(L)
+		pattern = re.sub(r'\[[\d-]+?\]', sub, pattern)
+	# We should be matching for patterns that look like [234589] here as well and finding the minimum
+	pattern = pattern.replace('X', '9')
+	pattern = pattern.replace('Z', '9')
+	pattern = pattern.replace('N', '9')
+	pattern = re.sub(r'^_', '', pattern)
+	return pattern
+
+def pattern_to_ranges(pattern):
+	""" Convert asterisk pattern to a list of ranges the pattern covers """
+
+	patterns = _chunk_safe_patterns(pattern)
+
+	ranges = []
+
+	for pattern in patterns:
+		low = _get_lowest_number_from_pattern(pattern)
+		high = _get_highest_number_from_pattern(pattern)
+		ranges.append((low,high))
+
+	return ranges
