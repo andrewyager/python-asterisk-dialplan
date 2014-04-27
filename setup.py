@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
 	name="asterisk_dialplan",
-	version="0.1",
+	version="0.1.1",
 	author="Andrew Yager",
 	author_email="andrew@rwts.com.au",
 	license="BSD",
