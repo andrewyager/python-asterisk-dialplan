@@ -29,7 +29,7 @@ except:
 
 setup(
 	name="asterisk_dialplan",
-	version="0.1.2",
+	version="0.1.3",
 	author="Andrew Yager",
 	author_email="andrew@rwts.com.au",
 	license="BSD",

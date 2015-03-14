@@ -51,6 +51,54 @@ from asterisk_dialplan.ranges import split_range
 ranges = split_range("61290000000", "61290000399")
 ```
 
+New in version 1.3 is support for parsing a dialplan context, and various functions to help determine what this context actually means. We support
+extensions, numeric and "n" priorities and a few other nice things. At this stage we don't support named priorities; and these are likely ot break it.
+
+The example below interprets a dialplan context, converts the extensions to ranges and finally determines the numeric coverage for these.
+
+Note: This currently does not support patterns with "selective" ranges due to an incompleteness in the logic for creating patterns in patterns.py. This means that patterns such as _145X[12459] will not be correctly interpreted, and you will instead be treated as _145X[1-9].
+
+Note that there is also currently no test coverage for this code. Contributions to resolve both of these issues are welcomed.
+
+```
+from asterisk_dialplan.dialplan import parse_diaplan_context, convert_dialplan_to_range, range_to_numbers
+
+dialplan = """
+exten => 1234,1,Dial(SIP/blah/${EXTEN})
+exten => 1234,2,Hangup()
+exten => _123415X,1,Dial(SIP/blah/${EXTEN},r)
+exten => _123415X,n,Hangup
+exten => _NXX,1,Dial(SIP/blah/${EXTEN})
+same => n,Dial(SIP/blah/${EXTEN})
+same = n, Dial(SIP/blah2/${EXTEN})
+exten => s,1,Hangup
+exten => t,1,Hangup
+exten => i,Hangup
+exten = _s14XX,1,Playback(invalid)
+exten = _s14tXXy,1,Playback(invalid)
+; this is a comment that will be ignored
+"""
+
+dialplan = parse_diaplan_context(dialplan)
+
+print dialplan
+
+dialplan = convert_dialplan_to_range(dialplan)
+
+print dialplan
+
+
+#now we print all of the individual numbers that make this up
+for rule in dialplan:
+  if 'exten_range' in rule:
+    for exten_range in rule['exten_range']:
+      extens = range_to_numbers(exten_range[0], exten_range[1])
+      for exten in extens:
+        print str(exten)
+  else:
+    print str(rule['exten'])
+```
+
 ## Error Handling
 
 If you provide bad input (i.e. your input strings/numbers aren't the same length, or your upper number is less than your lower number) the module will throw a DialplanException which you can handle.
