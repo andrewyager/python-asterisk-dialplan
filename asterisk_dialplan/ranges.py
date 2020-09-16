@@ -14,7 +14,7 @@ def split_range(low, high):
     :rtype: list
     """
 
-    from dialplan_exceptions import DialplanException
+    from .dialplan_exceptions import DialplanException
 
     # start by ensuring our arguments are integers
     low = int(low)

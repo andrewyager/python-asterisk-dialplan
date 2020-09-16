@@ -16,7 +16,7 @@ def build_safe_pattern(first_number, last_number):
     :rtype: string
     """
 
-    from dialplan_exceptions import DialplanException
+    from .dialplan_exceptions import DialplanException
 
     fn_string = str(first_number)
     ln_string = str(last_number)
