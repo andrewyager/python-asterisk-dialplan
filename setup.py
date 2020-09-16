@@ -1,45 +1,30 @@
 from setuptools import setup
 
-long_description = ''
- 
+long_description = ""
+
 try:
     import subprocess
-    import pandoc
- 
-    process = subprocess.Popen(
-        ['which pandoc'],
-        shell=True,
-        stdout=subprocess.PIPE,
-        universal_newlines=True
-    )
- 
-    pandoc_path = process.communicate()[0]
-    pandoc_path = pandoc_path.strip('\n')
- 
-    pandoc.core.PANDOC_PATH = pandoc_path
- 
-    doc = pandoc.Document()
-    doc.markdown = open('README.md').read()
- 
-    long_description = doc.rst
- 
-except:
+    import pypandoc
+
+    long_description = pypandoc.convert_file("README.md", to="rst", format="md")
+
+except ImportError:
     pass
 
 
 setup(
-	name="asterisk_dialplan",
-	version="0.1.3",
-	author="Andrew Yager",
-	author_email="andrew@rwts.com.au",
-	license="BSD",
-	packages=['asterisk_dialplan'],
-	description="Helpers to convert numbers to dialplan strings for use in Asterisk",
-	long_description=long_description,
-	classifiers=[
-		"Development Status :: 4 - Beta",
-		"Topic :: Communications :: Telephony",
-		"Topic :: Software Development :: Libraries",
-		"License :: OSI Approved :: BSD License",
-		]
+    name="asterisk_dialplan",
+    version="0.2.0",
+    author="Andrew Yager",
+    author_email="andrew@rwts.com.au",
+    license="BSD",
+    packages=["asterisk_dialplan"],
+    description="Helpers to convert numbers to dialplan strings for use in Asterisk",
+    long_description=long_description,
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Topic :: Communications :: Telephony",
+        "Topic :: Software Development :: Libraries",
+        "License :: OSI Approved :: BSD License",
+    ],
 )

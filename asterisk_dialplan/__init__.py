@@ -1,1 +1,1 @@
-__all__ = ['exceptions', 'patterns', 'ranges']
+__all__ = ["exceptions", "patterns", "ranges"]
