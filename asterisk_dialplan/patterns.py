@@ -68,9 +68,9 @@ def generate_patterns(low, high):
 
     """
 
-    from ranges import split_range
+    from .ranges import split_range
 
-    from dialplan_exceptions import DialplanException
+    from .dialplan_exceptions import DialplanException
 
     # get the string and integer reps of the numbers
     fn_string = str(low)
